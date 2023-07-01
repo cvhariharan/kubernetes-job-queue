@@ -1,0 +1,19 @@
+version: '3'
+services:
+  redis-server:
+    image: redis:latest
+
+  worker:
+    image: worker
+    environment:
+      - WORKER=1
+      - REDIS_CONNECTION_URL=redis://redis-server:6379/0
+  
+  api:
+    image: worker
+    environment:
+      - WORKER=0
+      - PORT=3000
+      - REDIS_CONNECTION_URL=redis://redis-server:6379/0
+    ports:
+      - 3000:3000
